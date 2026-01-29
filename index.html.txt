@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>لعبة أنواع الكلمة</title>
+<style>
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+    text-align: center;
+}
+.container {
+    background: white;
+    padding: 20px;
+    margin: 50px auto;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+}
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.timer {
+    color: red;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h2>🎯 لعبة أنواع الكلمة</h2>
+    <p id="question"></p>
+    <div id="choices"></div>
+    <p class="timer">⏳ الوقت: <span id="time">30</span> ثانية</p>
+    <p>⭐ الدرجة: <span id="score">0</span></p>
+</div>
+
+<script>
+const questions = [
+ {word:"كتاب", answer:"اسم"},
+ {word:"يكتب", answer:"فعل"},
+ {word:"من", answer:"حرف"},
+ {word:"مدرسة", answer:"اسم"},
+ {word:"ذهب", answer:"فعل"},
+ {word:"إلى", answer:"حرف"},
+ {word:"قلم", answer:"اسم"},
+ {word:"يلعب", answer:"فعل"},
+ {word:"على", answer:"حرف"},
+ {word:"طالب", answer:"اسم"},
+ {word:"قرأ", answer:"فعل"},
+ {word:"في", answer:"حرف"},
+ {word:"شجرة", answer:"اسم"},
+ {word:"نام", answer:"فعل"},
+ {word:"عن", answer:"حرف"},
+ {word:"طاولة", answer:"اسم"},
+ {word:"كتب", answer:"فعل"},
+ {word:"حتى", answer:"حرف"},
+ {word:"باب", answer:"اسم"},
+ {word:"شرب", answer:"فعل"},
+ {word:"ثم", answer:"حرف"},
+ {word:"قمر", answer:"اسم"},
+ {word:"جلس", answer:"فعل"},
+ {word:"أو", answer:"حرف"},
+ {word:"سيارة", answer:"اسم"},
+ {word:"ركب", answer:"فعل"},
+ {word:"بل", answer:"حرف"},
+ {word:"ولد", answer:"اسم"},
+ {word:"ضحك", answer:"فعل"},
+ {word:"لكن", answer:"حرف"}
+];
+
+let index = 0;
+let score = 0;
+let time = 30;
+let timer;
+
+function loadQuestion() {
+    if (index >= questions.length) {
+        document.body.innerHTML = `<h2>🎉 انتهت اللعبة</h2><p>درجتك النهائية: ${score} / 30</p>`;
+        return;
+    }
+
+    document.getElementById("question").innerText =
+        `ما نوع الكلمة: (${questions[index].word}) ؟`;
+
+    const choicesDiv = document.getElementById("choices");
+    choicesDiv.innerHTML = "";
+
+    ["اسم","فعل","حرف"].forEach(choice => {
+        let btn = document.createElement("button");
+        btn.innerText = choice;
+        btn.onclick = () => checkAnswer(choice);
+        choicesDiv.appendChild(btn);
+    });
+
+    time = 30;
+    document.getElementById("time").innerText = time;
+    clearInterval(timer);
+    timer = setInterval(countdown, 1000);
+}
+
+function countdown() {
+    time--;
+    document.getElementById("time").innerText = time;
+    if (time === 0) {
+        nextQuestion();
+    }
+}
+
+function checkAnswer(choice) {
+    if (choice === questions[index].answer) {
+        score++;
+        document.getElementById("score").innerText = score;
+    }
+    nextQuestion();
+}
+
+function nextQuestion() {
+    clearInterval(timer);
+    index++;
+    loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
